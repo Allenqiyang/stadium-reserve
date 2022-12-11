@@ -58,4 +58,13 @@ const router = createRouter({
   history: createWebHistory()
 })
 
+router.beforeEach((to) => {
+  if(to.path !== 'login') {
+    const token = sessionStorage.getItem('token')
+    if(!token) {
+      return '/login'
+    }
+  }
+})
+
 export default router
