@@ -15,5 +15,3 @@ npm install
 
 npm run serve
 ```
-
-找不到工作了😭
