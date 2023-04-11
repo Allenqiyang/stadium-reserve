@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { notices } from '../config'
+import { notices } from '../../config'
 
 const titles = ['场馆通知', '注意事项', '场馆动态', '其他']
 const images = ['badminton', 'basketball', 'football', 'table_tennis']

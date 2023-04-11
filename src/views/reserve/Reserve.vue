@@ -38,7 +38,7 @@
 
 <script setup>
 import { ref, watch } from "vue"
-import { getStadiumStatus, reserve, cancel } from "../service"
+import { getStadiumStatus, reserve, cancel } from "../../service"
 
 const chosenStadium = ref('1')
 

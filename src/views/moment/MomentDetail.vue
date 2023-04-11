@@ -43,8 +43,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useMomentStore } from '../store'
-import { getComment, writeComment } from '../service'
+import { useMomentStore } from '../../store'
+import { getComment, writeComment } from '../../service'
 
 const router = useRouter()
 const backToMoments = () => {

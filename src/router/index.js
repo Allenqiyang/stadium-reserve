@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 const routes = [
   {
     path: "/login",
-    component: () => import("../views/Login.vue")
+    component: () => import("../views/login/Login.vue")
   },
   {
     path: "/",
@@ -12,19 +12,19 @@ const routes = [
     children: [
       {
         path: "home",
-        component: () => import("../views/Home.vue")
+        component: () => import("../views/home/Home.vue")
       },
       {
         path: "reserve",
-        component: () => import("../views/Reserve.vue")
+        component: () => import("../views/reserve/Reserve.vue")
       },
       {
         path: "moment",
-        component: () => import("../views/Moment.vue")
+        component: () => import("../views/moment/Moment.vue")
       },
       {
         path: "detail",
-        component: () => import("../views/MomentDetail.vue")
+        component: () => import("../views/moment/MomentDetail.vue")
       },
       {
         path: "stadium",
@@ -58,13 +58,13 @@ const router = createRouter({
   history: createWebHistory()
 })
 
-router.beforeEach((to) => {
-  if(to.path !== 'login') {
-    const token = localStorage.getItem('token')
-    if(!token) {
-      return '/login'
-    }
-  }
-})
+// router.beforeEach((to) => {
+//   if(to.path !== 'login') {
+//     const token = localStorage.getItem('token')
+//     if(!token) {
+//       return '/login'
+//     }
+//   }
+// })
 
 export default router

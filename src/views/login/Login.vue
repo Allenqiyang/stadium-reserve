@@ -1,25 +1,6 @@
 <template>
   <div class="login-outer">
-    <transition name="el-fade-in">
-      <el-dialog v-model="isPopUpShow" title="Register">
-        <el-form :model="registerUser">
-          <el-form-item label="username" label-width="100px">
-            <el-input v-model="registerUser.username" autocomplete="off" />
-          </el-form-item>
-          <el-form-item label="password" label-width="100px">
-            <el-input v-model="registerUser.password" autocomplete="off" />
-          </el-form-item>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="isPopUpShow = false">Cancel</el-button>
-            <el-button type="primary" @click="confirmRegister">
-              Confirm
-            </el-button>
-          </span>
-        </template>
-      </el-dialog>
-    </transition>
+    <Register :isRegisterShow="isRegisterShow" @closeRegister="closeRegister"/>
     <div class="login-container">
       <el-form
         ref="inputFormRef"
@@ -30,11 +11,7 @@
       >
         <h3>Login</h3>
         <el-form-item class="input-item" label="username" prop="username">
-          <el-input 
-            v-model="userInfo.username" 
-            prefix-icon="UserFilled"
-            autoFocus
-          />
+          <el-input v-model="userInfo.username" prefix-icon="UserFilled" autoFocus/>
         </el-form-item>
         <el-form-item class="input-item" label="password" prop="password">
           <el-input
@@ -46,7 +23,7 @@
           />
         </el-form-item>
         <el-form-item class="register">
-          <el-button type="success" size="small" bg text @click="isPopUpShow = true">注册</el-button>
+          <el-button type="success" size="small" bg text @click="isRegisterShow = true">注册</el-button>
         </el-form-item>
         <el-form-item class="submit-block">
           <el-button type="primary" @click="submitForm(inputFormRef)">登录</el-button>
@@ -64,33 +41,15 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import "element-plus/theme-chalk/el-message.css"
 
-import { createUser, login } from '../service'
+import { login } from '../../service'
+import { rules } from './rules'
+import Register from './childs/Register.vue'
 
 const inputFormRef = ref()
-
-const validateName = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入用户名'))
-  } else {
-    callback()
-  }
-}
-const validatePass = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入密码'))
-  } else {
-    callback()
-  }
-}
 
 const userInfo = reactive({
   username: '',
   password: ''
-})
-
-const rules = reactive({
-  username: [{ validator: validateName, trigger: 'blur' }],
-  password: [{ validator: validatePass, trigger: 'blur' }]
 })
 
 // 登录
@@ -117,19 +76,8 @@ const resetForm = (formEl) => {
 }
 
 // 注册
-const isPopUpShow = ref(false)
-const registerUser = reactive({
-  username: '',
-  password: ''
-})
-const confirmRegister = async () => {
-  isPopUpShow.value = false
-  const res = await createUser(registerUser.username, registerUser.password)
-  if(res.affectedRows === 1) {
-    ElMessage.success('注册成功，现在可以去登录了🎉')
-  }
-}
-
+const isRegisterShow = ref(false)
+const closeRegister = () => {isRegisterShow.value = false}
 </script>
 
 <style lang="less" scoped>

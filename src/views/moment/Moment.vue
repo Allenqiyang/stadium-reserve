@@ -67,7 +67,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useMomentStore } from '../store'
+import { useMomentStore } from '../../store'
 import { ElMessage } from 'element-plus'
 import "element-plus/theme-chalk/el-message.css"
 
