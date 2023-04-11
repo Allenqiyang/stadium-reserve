@@ -1,21 +1,24 @@
 <template>
   <div class="moment-outer">
     <div class="moment-bg"></div>
-    <div class="write-moment">
-      <el-input 
-        v-model="momentText"
-        rows="5"
-        type="textarea"
-        resize="none"
-        placeholder="有什么想和大家分享的~"
-      />
-      <el-button @click="confirmPublishMoment" type="primary">发布</el-button>
-    </div>
+    <WriteMoment @momentPublish="MomentDidPublish"/>
     <div v-for="(moment, index) in momentList" :key="moment.id" class="moment-item">
-      <div class="avator"></div>
+      <div class="avator">
+        <img :src="moment.user.avatarUrl ?? require('@/assets' + backupAvatar)" alt="">
+      </div>
       <p class="name">{{moment.user.name}}</p>
       <p class="time">{{moment.updateTime.slice(0, 10)}}</p>
       <p class="content" @click="jumpToDetail(moment.id)">{{moment.content}}</p>
+      <div class="moment-image" v-if="moment.images">
+        <el-image
+          v-for="image of moment.images"
+          :key="image"
+          :src="image"
+          :preview-src-list="moment.images"
+          :zoom-rate="1.2"
+          fit="cover"
+        />
+      </div>
       <div class="btns">
         <el-button type="primary" icon="Edit" @click="startEdit(moment.id)"/>
         <el-button 
@@ -68,11 +71,10 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMomentStore } from '../../store'
-import { ElMessage } from 'element-plus'
-import "element-plus/theme-chalk/el-message.css"
+
+import WriteMoment from './childs/WriteMoment.vue'
 
 import { 
-  publishMoment, 
   getMomentList, 
   updateMoment, 
   deleteMoment,
@@ -81,16 +83,11 @@ import {
   getMomentDetail
 } from '@/service'
 
-const momentText = ref('')
-const confirmPublishMoment = async () => {
-  if(momentText.value === '') {
-    ElMessage.warning('不能发布空白内容哦')
-    return
-  }
-  publishMoment(momentText.value)
-  momentText.value = ''
+const MomentDidPublish = async () => {
   momentList.value = await getMomentList(0, 8)
 }
+
+const backupAvatar = '/images/avatar.png'
 
 let offset = ref(0)
 let momentCount = ref(0)
@@ -128,22 +125,22 @@ const startEdit = (id) => {
 const updateText = ref('')
 const confirmUpdateMoment = async () => {
   isPopUpShow.value = false
-  updateMoment(momentId, updateText.value).then(res => console.log(res))
+  await updateMoment(currentEdit.value, updateText.value)
   momentList.value = await getMomentList(0, 8)
 }
 
 const confirmDelete = async (momentId) => {
-  deleteMoment(momentId)
+  await deleteMoment(momentId)
   momentList.value = await getMomentList(0, 8)
 }
 
 const commentText = ref('')
 const isEditCommentShow = ref(Array(8).fill(false))
 
-const confirmPublishComment = (momentId) => {
-  writeComment(momentId, commentText.value)
+const confirmPublishComment = async (momentId) => {
+  const res = await writeComment(momentId, commentText.value)
+  console.log(res)
 }
-
 
 </script>
 
@@ -166,23 +163,6 @@ const confirmPublishComment = (momentId) => {
     width: 100%;
     transform: translateX(-50%);
   }
-  
-  .write-moment {
-    border-radius: 10px;
-    background-color: rgba(244, 255, 255, 0.9);
-    width: 700px;
-    height: 195px;
-    margin: 0 auto;
-    padding-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    
-    .el-textarea {
-      width: 650px;
-      margin-bottom: 20px;
-    }
-  }
 
   .moment-item {
     border-radius: 10px;
@@ -195,14 +175,18 @@ const confirmPublishComment = (momentId) => {
 
     .avator {
       position: absolute;
-      background-image: url('@/assets/images/avatar.png');
       background-repeat: no-repeat;
       background-size: contain;
-      border-radius: 50%;
       height: 48px;
       width: 48px;
       left: 24px;
       top: 24px;
+
+      img {
+        border-radius: 50%;
+        height: 48px;
+        width: 48px;
+      }
     }
 
     .name {
@@ -227,6 +211,20 @@ const confirmPublishComment = (momentId) => {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .moment-image {
+      margin: 10px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      padding: 0 40px;
+      flex-wrap: wrap;
+
+      .el-image {
+        width: 100px;
+        margin-right: 5px;
+      }
     }
 
     .btns {
