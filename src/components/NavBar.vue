@@ -7,7 +7,7 @@
           <div class="avatar"></div>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>个人中心</el-dropdown-item>
+              <el-dropdown-item @click="gotoPersonal">个人中心</el-dropdown-item>
               <el-dropdown-item @click="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -58,16 +58,13 @@ const logout = () => {
   localStorage.removeItem('token')
   router.push('/login')
 }
+
+const gotoPersonal = () => {
+  router.push('/personal')
+}
 </script>
 
 <style lang="less" scoped>
-// .nav-bar {
-//   width: 100%;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-// }
 
 .top {
   display: flex;

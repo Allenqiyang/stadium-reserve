@@ -6,6 +6,10 @@ const routes = [
     component: () => import("../views/login/Login.vue")
   },
   {
+    path: "/personal",
+    component: () => import("../views/personal/Personal.vue")
+  },
+  {
     path: "/",
     component: () => import("../views/Main.vue"),
     redirect: "/home",
@@ -58,13 +62,13 @@ const router = createRouter({
   history: createWebHistory()
 })
 
-// router.beforeEach((to) => {
-//   if(to.path !== 'login') {
-//     const token = localStorage.getItem('token')
-//     if(!token) {
-//       return '/login'
-//     }
-//   }
-// })
+router.beforeEach((to) => {
+  if(to.path !== '/login') {
+    const token = localStorage.getItem('token')
+    if(!token) {
+      router.push('/login')
+    }
+  }
+})
 
 export default router
