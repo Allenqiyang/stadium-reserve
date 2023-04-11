@@ -26,7 +26,7 @@
   text-align: center;
 
   .badminton-court {
-    background-image: url("../assets/images/badminton.png");
+    background-image: url("@/assets/images/badminton.png");
     background-repeat: no-repeat;
     background-size: 100%;
     width: 600px;

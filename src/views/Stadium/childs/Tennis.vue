@@ -24,7 +24,7 @@
   text-align: center;
 
   .table {
-    background-image: url("../assets/images/table_tennis.png");
+    background-image: url("@/assets/images/table_tennis.png");
     background-repeat: no-repeat;
     background-size: 100%;
     width: 600px;

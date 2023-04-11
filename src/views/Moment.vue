@@ -128,7 +128,7 @@ const startEdit = (id) => {
 const updateText = ref('')
 const confirmUpdateMoment = async () => {
   isPopUpShow.value = false
-  updateMoment(momentId, updateText.value)
+  updateMoment(momentId, updateText.value).then(res => console.log(res))
   momentList.value = await getMomentList(0, 8)
 }
 
@@ -151,7 +151,7 @@ const confirmPublishComment = (momentId) => {
 .moment-outer {
   padding-top: 20px;
   .moment-bg {
-    background-image: url('../assets/images/SchneebergOchsenkopf.jpg');
+    background-image: url('@/assets/images/SchneebergOchsenkopf.jpg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: top;
@@ -195,7 +195,7 @@ const confirmPublishComment = (momentId) => {
 
     .avator {
       position: absolute;
-      background-image: url('../assets/images/avatar.png');
+      background-image: url('@/assets/images/avatar.png');
       background-repeat: no-repeat;
       background-size: contain;
       border-radius: 50%;

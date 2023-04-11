@@ -28,24 +28,24 @@ const routes = [
       },
       {
         path: "stadium",
-        component: () => import("../views/Stadium.vue"),
+        component: () => import("../views/Stadium/Stadium.vue"),
         redirect: "/stadium/basketball",
         children: [
           {
             path: "basketball",
-            component: () => import("../components/Basketball.vue")
+            component: () => import("../views/Stadium/childs/Basketball.vue")
           },
           {
             path: "football",
-            component: () => import("../components/Football.vue")
+            component: () => import("../views/Stadium/childs/Football.vue")
           },
           {
             path: "tennis",
-            component: () => import("../components/Tennis.vue")
+            component: () => import("../views/Stadium/childs/Tennis.vue")
           },
           {
             path: "badminton",
-            component: () => import("../components/Badminton.vue")
+            component: () => import("../views/Stadium/childs/Badminton.vue")
           }
         ]
       }
@@ -60,7 +60,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if(to.path !== 'login') {
-    const token = sessionStorage.getItem('token')
+    const token = localStorage.getItem('token')
     if(!token) {
       return '/login'
     }

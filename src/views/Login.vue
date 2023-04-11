@@ -99,14 +99,13 @@ const submitForm = (formEl) => {
   if (!formEl) return
   formEl.validate(async (valid) => {
     if (valid) {
-      console.log('submit!')
       const res = await login(userInfo.username, userInfo.password)
       if(res?.id) {
-        sessionStorage.setItem('token', res?.token)
+        localStorage.setItem('token', res?.token)
         router.push('/home')
       }
     } else {
-      console.log('error submit!')
+      ElMessage.error("请正确输入账号和密码")
       return false
     }
   })
@@ -135,7 +134,7 @@ const confirmRegister = async () => {
 
 <style lang="less" scoped>
 .login-outer {
-  background-image: url('../assets/images/TeaGardensMunnar.jpg');
+  background-image: url('@/assets/images/TeaGardensMunnar.jpg');
   background-repeat: no-repeat;
   background-size: 100%;
   width: 100%;

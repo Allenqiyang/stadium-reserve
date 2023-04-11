@@ -1,9 +1,11 @@
 <template>
   <div>
     <NavBar/>
-    <transition name="el-fade-in">
-      <router-view></router-view>
-    </transition>
+    <router-view v-slot="{ Component }">
+      <transition name="el-fade-in">
+        <component :is="Component" />
+      </transition>
+    </router-view>
     <div class="page-footer">
       运动之前记得热身，运动过程中也请注意安全⛄
     </div>

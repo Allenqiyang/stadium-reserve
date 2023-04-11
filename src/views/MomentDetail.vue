@@ -90,7 +90,7 @@ const confirmPublishComment = (momentId) => {
   }
 
   .bg {
-    background-image: url('../assets/images/SchneebergOchsenkopf.jpg');
+    background-image: url('@/assets/images/SchneebergOchsenkopf.jpg');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: top;
@@ -117,7 +117,7 @@ const confirmPublishComment = (momentId) => {
 
     .avator {
       position: absolute;
-      background-image: url('../assets/images/avatar.png');
+      background-image: url('@/assets/images/avatar.png');
       background-repeat: no-repeat;
       background-size: contain;
       border-radius: 50%;
@@ -177,7 +177,7 @@ const confirmPublishComment = (momentId) => {
       }
       .c-avator {
         position: absolute;
-        background-image: url('../assets/images/avatar.png');
+        background-image: url('@/assets/images/avatar.png');
         background-repeat: no-repeat;
         background-size: contain;
         border-radius: 50%;

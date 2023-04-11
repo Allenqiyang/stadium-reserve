@@ -10,44 +10,8 @@
       </el-carousel>
     </div>
     <div class="message">
-      <div>
-        <div class="message-title">场馆通知</div>
-        <div class="notice">
-          <div v-for="item of notices" :key="item.id">
-            <div class="notice-item">
-              <p class="content">> {{item.content}}</p>
-              <p class="date">{{item.date}}</p>
-            </div>
-            <div class="divider"></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="message-title">注意事项</div>
-        <div class="notice">
-          <div v-for="item of notices" :key="item.id">
-            <div class="notice-item">
-              <p class="content">> {{item.content}}</p>
-              <p class="date">{{item.date}}</p>
-            </div>
-            <div class="divider"></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="message-title">场馆动态</div>
-        <div class="notice">
-          <div v-for="item of notices" :key="item.id">
-            <div class="notice-item">
-              <p class="content">> {{item.content}}</p>
-              <p class="date">{{item.date}}</p>
-            </div>
-            <div class="divider"></div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="message-title">其他</div>
+      <div v-for="title of titles" :key="title">
+        <div class="message-title">{{title}}</div>
         <div class="notice">
           <div v-for="item of notices" :key="item.id">
             <div class="notice-item">
@@ -65,6 +29,7 @@
 <script setup>
 import { notices } from '../config'
 
+const titles = ['场馆通知', '注意事项', '场馆动态', '其他']
 const images = ['badminton', 'basketball', 'football', 'table_tennis']
 </script>
 

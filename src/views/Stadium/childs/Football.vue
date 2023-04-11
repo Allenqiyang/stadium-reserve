@@ -26,7 +26,7 @@
   text-align: center;
 
   .foot-court {
-    background-image: url("../assets/images/football.png");
+    background-image: url("@/assets/images/football.png");
     background-repeat: no-repeat;
     background-size: 100%;
     width: 409px;

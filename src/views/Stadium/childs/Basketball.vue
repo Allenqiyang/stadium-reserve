@@ -25,7 +25,7 @@
   text-align: center;
 
   .bask-court {
-    background-image: url("../assets/images/basketball.png");
+    background-image: url("@/assets/images/basketball.png");
     background-repeat: no-repeat;
     background-size: 100%;
     width: 400px;
