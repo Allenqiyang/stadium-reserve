@@ -4,7 +4,9 @@
       <div class="left">🏠 Allen Stadium Reserve System</div>
       <div class="right">
         <el-dropdown>
-          <div class="avatar"></div>
+          <div class="avatar">
+            <img :src="userInfo.avatarUrl || require('@/assets' + backupAvatar)" alt="">
+          </div>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="gotoPersonal">个人中心</el-dropdown-item>
@@ -31,7 +33,9 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
+import { useUserStore } from '@/store'
 import cache from '@/utils/cache'
 
 let activeIndex = ref('1')
@@ -55,6 +59,10 @@ const handleSelect = (key) => {
       break
   }
 }
+
+const userStore = useUserStore()
+const { userInfo } = storeToRefs(userStore)
+const backupAvatar = '/images/avatar.png'
 
 const logout = () => {
   cache.deleteCache('token')
@@ -107,12 +115,11 @@ const gotoPersonal = () => {
   height: 60px;
   background-color: rgb(246, 251, 255);
   .avatar {
-    background-image: url('@/assets/images/avatar.png');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
   }
 }
 
