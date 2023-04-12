@@ -69,5 +69,7 @@ const closeRegister = () => {
 </script>
 
 <style scoped lang="less">
-  
+:deep(.el-dialog) {
+  border-radius: 10px;
+}
 </style>
