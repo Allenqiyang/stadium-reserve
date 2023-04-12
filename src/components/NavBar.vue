@@ -15,7 +15,7 @@
       </div>
     </div>
     <el-menu
-      :default-active="String(activeIndex)"
+      :default-active="activeIndex"
       class="el-menu"
       mode="horizontal"
       @select="handleSelect"
@@ -29,10 +29,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const activeIndex = ref('1')
+let activeIndex = '1'
 const router = useRouter()
 
 const handleSelect = (key) => {
@@ -60,22 +60,36 @@ const logout = () => {
 }
 
 const route = useRoute()
-switch(route.path) {
-  case '/home':
-    activeIndex.value = ref('1')
-    break;
-  case '/stadium':
-    activeIndex.value = ref('2')
-    break
-  case '/reserve':
-    activeIndex.value = ref('3')
-    break
-  case '/moment':
-    activeIndex.value = ref('4')
-    break
-  default:
-    break
-}
+onMounted(() => {
+  switch(route.path) {
+    case '/home':
+      activeIndex = '1'
+      break;
+    case '/stadium/basketball':
+      activeIndex = '2'
+      break
+    case '/stadium/football':
+      activeIndex = '2'
+      break
+    case '/stadium/badminton':
+      activeIndex = '2'
+      break
+    case '/stadium/tennis':
+      activeIndex = '2'
+      break
+    case '/reserve':
+      activeIndex = '3'
+      break
+    case '/moment':
+      activeIndex = '4'
+      break
+    case '/detail':
+      activeIndex = '4'
+      break
+    default:
+      break
+  }
+})
 
 const gotoPersonal = () => {
   router.push('/personal')
