@@ -19,7 +19,7 @@ export default defineStore('user', {
       }
       const userInfo = cache.getCache('user')
       if(userInfo) {
-        this.userInfo = JSON.parse(userInfo)
+        this.userInfo = userInfo
       }
     }
   }
