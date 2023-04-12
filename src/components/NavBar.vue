@@ -32,7 +32,7 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import cache from '@/utils'
+import cache from '@/utils/cache'
 
 let activeIndex = ref('1')
 const router = useRouter()

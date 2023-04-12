@@ -18,7 +18,6 @@ export default defineStore('user', {
         this.token = token
       }
       const userInfo = cache.getCache('user')
-      console.log(userInfo)
       if(userInfo) {
         this.userInfo = JSON.parse(userInfo)
       }
