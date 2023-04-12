@@ -41,8 +41,10 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import "element-plus/theme-chalk/el-message.css"
 
-import { login } from '../../service'
+import { useUserStore } from '@/store'
+import { login, getUserInfo } from '../../service'
 import { rules } from './rules'
+import cache from '@/utils/cache'
 import Register from './childs/Register.vue'
 
 const inputFormRef = ref()
@@ -52,6 +54,8 @@ const userInfo = reactive({
   password: ''
 })
 
+const store = useUserStore()
+
 // 登录
 const router = useRouter()
 const submitForm = (formEl) => {
@@ -60,7 +64,9 @@ const submitForm = (formEl) => {
     if (valid) {
       const res = await login(userInfo.username, userInfo.password)
       if(res?.id) {
-        localStorage.setItem('token', res?.token)
+        cache.setCache('token', res?.token)
+        const user = await getUserInfo(res.id)
+        store.storeUserInfo(user)
         router.push('/home')
       }
     } else {

@@ -2,6 +2,10 @@
   <div class="moment-outer">
     <div class="moment-bg"></div>
     <WriteMoment @momentPublish="MomentDidPublish"/>
+    <UpdateMoment 
+      :isUpdateShow="isUpdateShow" :momentId="currentId" 
+      @close-update="closeUpdate" @update-success="updateSuccess"
+    />
     <div v-for="(moment, index) in momentList" :key="moment.id" class="moment-item">
       <div class="avator">
         <img :src="moment.user.avatarUrl ?? require('@/assets' + backupAvatar)" alt="">
@@ -20,7 +24,7 @@
         />
       </div>
       <div class="btns">
-        <el-button type="primary" icon="Edit" @click="startEdit(moment.id)"/>
+        <el-button type="primary" icon="Edit" @click="editMoment(moment.id)"/>
         <el-button 
           icon="ChatRound" 
           @click="isEditCommentShow[index] = !isEditCommentShow[index]"></el-button>
@@ -45,25 +49,6 @@
       <el-button :disabled="offset === 0" @click="lastPage">&lt; 上一页</el-button>
       <el-button :disabled="offset + 8 >= momentCount.count" @click="nextPage">下一页 ></el-button>
     </div>
-    <transition name="el-fade-in">
-      <el-dialog v-model="isPopUpShow" title="修改内容">
-        <el-input 
-          v-model="updateText"
-          rows="4"
-          type="textarea"
-          resize="none"
-          placeholder="想修改成什么~"
-        />
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="isPopUpShow = false">Cancel</el-button>
-            <el-button type="primary" @click="confirmUpdateMoment">
-              Confirm
-            </el-button>
-          </span>
-        </template>
-      </el-dialog>
-    </transition>
   </div>
 </template>
 
@@ -73,15 +58,16 @@ import { useRouter } from 'vue-router'
 import { useMomentStore } from '../../store'
 
 import WriteMoment from './childs/WriteMoment.vue'
+import UpdateMoment from './childs/UpdateMoment.vue'
 
 import { 
   getMomentList, 
-  updateMoment, 
   deleteMoment,
   writeComment,
   getMomentCount,
   getMomentDetail
 } from '@/service'
+import { ElMessage } from 'element-plus'
 
 const MomentDidPublish = async () => {
   momentList.value = await getMomentList(0, 8)
@@ -114,24 +100,22 @@ const nextPage = async () => {
   momentList.value = await getMomentList(offset.value, 8)
 }
 
-const currentEdit = ref(0)
-const isPopUpShow = ref(false)
-
-const startEdit = (id) => {
-  currentEdit.value = id
-  isPopUpShow.value = true
+const isUpdateShow = ref(false)
+const currentId = ref(0)
+const editMoment = (id) => {
+  currentId.value = id
+  isUpdateShow.value = true
 }
-
-const updateText = ref('')
-const confirmUpdateMoment = async () => {
-  isPopUpShow.value = false
-  await updateMoment(currentEdit.value, updateText.value)
-  momentList.value = await getMomentList(0, 8)
+const closeUpdate = () => {
+  isUpdateShow.value = false
+}
+const updateSuccess = async () => {
+  momentList.value = await getMomentList(offset.value, 8)
 }
 
 const confirmDelete = async (momentId) => {
   await deleteMoment(momentId)
-  momentList.value = await getMomentList(0, 8)
+  momentList.value = await getMomentList(offset.value, 8)
 }
 
 const commentText = ref('')
@@ -139,7 +123,10 @@ const isEditCommentShow = ref(Array(8).fill(false))
 
 const confirmPublishComment = async (momentId) => {
   const res = await writeComment(momentId, commentText.value)
-  console.log(res)
+  if(res.affectedRows === 1) {
+    ElMessage.success('评论发布成功🎉, 点击进入动态详情查看')
+    commentText.value = ''
+  }
 }
 
 </script>

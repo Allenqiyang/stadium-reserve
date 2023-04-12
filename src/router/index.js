@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
+import cache from "@/utils/cache"
 
 const routes = [
   {
@@ -64,7 +65,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if(to.path !== '/login') {
-    const token = localStorage.getItem('token')
+    const token = cache.getCache('token')
     if(!token) {
       router.push('/login')
     }

@@ -32,7 +32,9 @@
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-let activeIndex = '1'
+import cache from '@/utils'
+
+let activeIndex = ref('1')
 const router = useRouter()
 
 const handleSelect = (key) => {
@@ -55,7 +57,7 @@ const handleSelect = (key) => {
 }
 
 const logout = () => {
-  localStorage.removeItem('token')
+  cache.deleteCache('token')
   router.push('/login')
 }
 
@@ -63,28 +65,28 @@ const route = useRoute()
 onMounted(() => {
   switch(route.path) {
     case '/home':
-      activeIndex = '1'
+      activeIndex.value = '1'
       break;
     case '/stadium/basketball':
-      activeIndex = '2'
+      activeIndex.value = '2'
       break
     case '/stadium/football':
-      activeIndex = '2'
+      activeIndex.value = '2'
       break
     case '/stadium/badminton':
-      activeIndex = '2'
+      activeIndex.value = '2'
       break
     case '/stadium/tennis':
-      activeIndex = '2'
+      activeIndex.value = '2'
       break
     case '/reserve':
-      activeIndex = '3'
+      activeIndex.value = '3'
       break
     case '/moment':
-      activeIndex = '4'
+      activeIndex.value = '4'
       break
     case '/detail':
-      activeIndex = '4'
+      activeIndex.value = '4'
       break
     default:
       break

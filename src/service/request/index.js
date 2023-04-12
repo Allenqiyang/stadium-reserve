@@ -3,6 +3,7 @@ import { ElLoading, ElMessage } from "element-plus"
 import "element-plus/theme-chalk/el-loading.css"
 import "element-plus/theme-chalk/el-message.css"
 import { BASE_URL, TIME_OUT } from "./config"
+import cache from "@/utils/cache"
 
 const service = axios.create({
   baseURL: BASE_URL,
@@ -12,7 +13,7 @@ const service = axios.create({
 let loading
 
 service.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
+  const token = cache.getCache('token')
   if(token) {
     config.headers = { 'Authorization': token, ...config.headers }
   }

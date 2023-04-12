@@ -22,6 +22,13 @@ export const login = (username, password) => {
   })
 }
 
+export const getUserInfo = (userId) => {
+  return service.request({
+    url: `/users/${userId}`,
+    method: 'get'
+  })
+}
+
 export const reserve = (period, stadiumId) => {
   return service.request({
     url: '/reserve',
