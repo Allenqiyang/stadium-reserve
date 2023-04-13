@@ -76,6 +76,14 @@ export const uploadImage = (data, momentId) => {
   })
 }
 
+export const uploadAvatar = (data) => {
+  return service.request({
+    url: `/upload/avatar`,
+    method: 'post',
+    data
+  })
+}
+
 export const getMomentList = (offset, size) => {
   return service.request({
     url: `/moment?offset=${offset}&size=${size}`,
