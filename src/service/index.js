@@ -68,6 +68,14 @@ export const publishMoment = (momentContent) => {
   })
 }
 
+export const uploadImage = (data, momentId) => {
+  return service.request({
+    url: `/upload/picture/?momentId=${momentId}`,
+    method: 'post',
+    data
+  })
+}
+
 export const getMomentList = (offset, size) => {
   return service.request({
     url: `/moment?offset=${offset}&size=${size}`,

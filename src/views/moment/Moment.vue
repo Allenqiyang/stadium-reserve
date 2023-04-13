@@ -70,7 +70,7 @@ import {
 import { ElMessage } from 'element-plus'
 
 const MomentDidPublish = async () => {
-  momentList.value = await getMomentList(0, 8)
+  momentList.value = await getMomentList(offset.value, 8)
 }
 
 const backupAvatar = '/images/avatar.png'
