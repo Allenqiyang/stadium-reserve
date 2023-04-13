@@ -11,6 +11,10 @@ const routes = [
     component: () => import("../views/personal/Personal.vue")
   },
   {
+    path: "/:pathMatch(.*)*",
+    component: () => import("../views/not-found/index.vue")
+  },
+  {
     path: "/",
     component: () => import("../views/Main.vue"),
     redirect: "/home",
@@ -68,6 +72,12 @@ router.beforeEach((to) => {
     const token = cache.getCache('token')
     if(!token) {
       router.push('/login')
+    }
+  }
+  if(to.path === '/detail') {
+    const detail = cache.getCache('momentDetail')
+    if(!detail) {
+      router.push('//home')
     }
   }
 })
