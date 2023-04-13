@@ -97,7 +97,7 @@ const confirmPublishMoment = async () => {
 
     .el-button {
       position: absolute;
-      top: 160px;
+      top: 157px;
       right: 50px;
     }
   }
