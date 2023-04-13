@@ -10,6 +10,8 @@ export default pinia
 const setupStore = () => {
   const user = useUserStore()
   user.loadLocalData()
+  const moment = useMomentStore()
+  moment.loadLocalData()
 }
 
 export {

@@ -2,7 +2,7 @@
   <div class="update-moment">
     <transition name="el-fade-in">
       <div>
-        <el-dialog v-model="updateShow" :show-close="false" title="修改内容" @close="closeUpdate">
+        <el-dialog v-model="updateShow" :show-close="false" title="修改动态" @close="closeUpdate">
           <el-input 
             v-model="updateText"
             rows="4"
@@ -57,5 +57,7 @@ const confirmUpdateMoment = async () => {
 </script>
 
 <style lang="less" scoped>
-  
+:deep(.el-dialog) {
+  border-radius: 10px;
+}
 </style>

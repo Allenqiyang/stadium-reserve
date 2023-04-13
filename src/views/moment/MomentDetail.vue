@@ -2,14 +2,30 @@
   <div class="detail-outer">
     <div class="bg"></div>
     <el-button @click="backToMoments" link class="back-moment">&lt; 返回</el-button>
+    <UpdateMoment 
+      :isUpdateShow="isUpdateShow" :momentId="momentDetail.id" 
+      @close-update="closeUpdate" @update-success="updateSuccess"
+    />
     <div class="moment-detail">
-      <div class="avator"></div>
-      <p class="name">{{store.momentDetail.user.name}}</p>
-      <p class="time">{{store.momentDetail.updateTime.slice(0, 10)}}</p>
-      <p class="content">{{store.momentDetail.content}}</p>
+      <div class="avatar">
+        <img :src="momentDetail.user.avatarUrl ?? backupAvatar" alt="">
+      </div>
+      <p class="name">{{momentDetail.user.name}}</p>
+      <p class="time">{{momentDetail.updateTime.slice(0, 10)}}</p>
+      <p class="content">{{momentDetail.content}}</p>
+      <div class="moment-image" v-if="momentDetail.images">
+        <el-image
+          v-for="image of momentDetail.images"
+          :key="image"
+          :src="image"
+          :preview-src-list="momentDetail.images"
+          :zoom-rate="1.2"
+          fit="cover"
+        />
+      </div>
       <div class="btns">
-        <el-button icon="ChatRound"></el-button>
-        <el-popconfirm title="要删除这条动态吗?" @confirm="confirmDelete(store.momentDetail.id)">
+        <el-button type="primary" icon="Edit" @click="isUpdateShow = true"></el-button>
+        <el-popconfirm title="要删除这条动态吗?" @confirm="confirmDelete(momentDetail.id)">
           <template #reference>
             <el-button type="danger" icon="Delete"/>
           </template>
@@ -24,13 +40,15 @@
           placeholder="发一条友善的评论"
         />
         <el-button 
-          @click="confirmPublishComment(store.momentDetail.id)" 
+          @click="confirmPublishComment(momentDetail.id)" 
           type="primary">发表评论</el-button>
       </div>
       <div class="show-comment">
         <div v-for="comment in commentList" :key="comment.id" class="comment-detail">
           <div class="comment-divider"></div>
-          <div class="c-avator"></div>
+          <div class="c-avatar">
+            <img :src="comment.user.avatarUrl ?? backupAvatar" alt="">
+          </div>
           <p class="name">{{comment.user.name}}</p>
           <p class="time">{{comment.updateTime.slice(0, 10)}}</p>
           <p class="content">{{comment.content}}</p>
@@ -43,8 +61,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 import { useMomentStore } from '../../store'
 import { getComment, writeComment } from '../../service'
+import UpdateMoment from './childs/UpdateMoment.vue'
 
 const router = useRouter()
 const backToMoments = () => {
@@ -52,32 +73,33 @@ const backToMoments = () => {
 }
 
 const store = useMomentStore()
+const { momentDetail } = storeToRefs(store)
+
+const backupAvatar = require('@/assets/images/avatar.png')
+
+const isUpdateShow = ref(false)
+const closeUpdate = () => {
+  isUpdateShow.value = false
+}
+const updateSuccess = () => {
+  store.storeMomentDetail(momentDetail.value.id)
+}
 
 const commentList = ref([])
 onMounted(async () => {
-  commentList.value = await getComment(store.momentDetail.id)
+  commentList.value = await getComment(momentDetail.value.id)
 })
 
-// {
-//   commentId: null
-//   content: "确实不错"
-//   createTime: "2022-10-21T04:22:42.000Z"
-//   id: 3
-//   updateTime: "2022-10-21T04:22:42.000Z"
-//   user: {
-//     id: 3
-//     name: "Rose"
-//   }
-// }
-
 const confirmDelete = async (momentId) => {
-  deleteMoment(momentId)
+  await deleteMoment(momentId)
   router.push('/moment')
 }
 
 const commentText = ref('')
-const confirmPublishComment = (momentId) => {
-  writeComment(momentId, commentText.value)
+const confirmPublishComment = async (momentId) => {
+  await writeComment(momentId, commentText.value)
+  commentText.value = ''
+  commentList.value = await getComment(momentId)
 }
 
 </script>
@@ -115,16 +137,18 @@ const confirmPublishComment = (momentId) => {
     padding-bottom: 20px;
     position: relative;
 
-    .avator {
+    .avatar {
       position: absolute;
-      background-image: url('@/assets/images/avatar.png');
-      background-repeat: no-repeat;
-      background-size: contain;
-      border-radius: 50%;
       height: 48px;
       width: 48px;
       left: 24px;
       top: 24px;
+
+      img {
+        border-radius: 50%;
+        height: 48px;
+        width: 48px;
+      }
     }
 
     .name {
@@ -145,6 +169,20 @@ const confirmPublishComment = (momentId) => {
       width: 540px;
       margin-left: 90px;
       margin-top: -3px;
+    }
+
+    .moment-image {
+      margin: 10px 50px;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      padding: 0 40px;
+      flex-wrap: wrap;
+
+      .el-image {
+        width: 100px;
+        margin-right: 5px;
+      }
     }
 
     .btns {
@@ -175,16 +213,18 @@ const confirmPublishComment = (momentId) => {
           margin: 0 auto;
         }
       }
-      .c-avator {
+      .c-avatar {
         position: absolute;
-        background-image: url('@/assets/images/avatar.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        border-radius: 50%;
         height: 35px;
         width: 35px;
         left: 44px;
         top: 22px;
+
+        img {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+        }
       }
     }
   }

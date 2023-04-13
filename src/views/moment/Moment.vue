@@ -8,7 +8,7 @@
     />
     <div v-for="(moment, index) in momentList" :key="moment.id" class="moment-item">
       <div class="avator">
-        <img :src="moment.user.avatarUrl ?? require('@/assets' + backupAvatar)" alt="">
+        <img :src="moment.user.avatarUrl ?? backupAvatar" alt="">
       </div>
       <p class="name">{{moment.user.name}}</p>
       <p class="time">{{moment.updateTime.slice(0, 10)}}</p>
@@ -57,6 +57,9 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMomentStore } from '../../store'
 
+import { ElMessage } from 'element-plus'
+import "element-plus/theme-chalk/el-message.css"
+
 import WriteMoment from './childs/WriteMoment.vue'
 import UpdateMoment from './childs/UpdateMoment.vue'
 
@@ -64,16 +67,14 @@ import {
   getMomentList, 
   deleteMoment,
   writeComment,
-  getMomentCount,
-  getMomentDetail
+  getMomentCount
 } from '@/service'
-import { ElMessage } from 'element-plus'
 
 const MomentDidPublish = async () => {
   momentList.value = await getMomentList(offset.value, 8)
 }
 
-const backupAvatar = '/images/avatar.png'
+const backupAvatar = require('@/assets/images/avatar.png')
 
 let offset = ref(0)
 let momentCount = ref(0)
@@ -86,8 +87,7 @@ onMounted(async () => {
 const router = useRouter()
 const store = useMomentStore()
 const jumpToDetail = async (momentId) => {
-  const detail = await getMomentDetail(momentId)
-  store.momentDetail = detail[0]
+  await store.storeMomentDetail(momentId)
   router.push('/detail')
 }
 
@@ -162,8 +162,6 @@ const confirmPublishComment = async (momentId) => {
 
     .avator {
       position: absolute;
-      background-repeat: no-repeat;
-      background-size: contain;
       height: 48px;
       width: 48px;
       left: 24px;
