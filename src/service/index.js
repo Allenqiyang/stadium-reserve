@@ -29,31 +29,33 @@ export const getUserInfo = (userId) => {
   })
 }
 
-export const reserve = (period, stadiumId) => {
+export const reserve = (courtId, date, period) => {
   return service.request({
     url: '/reserve',
     method: 'post',
     data: {
-      period,
-      stadiumId
+      courtId,
+      date,
+      period
     }
   })
 }
 
-export const cancel = (period, stadiumId) => {
+export const cancel = (courtId, date, period) => {
   return service.request({
-    url: '/reserve',
-    method: 'delete',
+    url: '/reserve/cancel',
+    method: 'post',
     data: {
-      period,
-      stadiumId
+      courtId,
+      date,
+      period
     }
   })
 }
 
-export const getStadiumStatus = () => {
+export const getStadiumStatus = (courtId, date) => {
   return service.request({
-    url: '/reserve',
+    url: `/reserve?courtId=${courtId}&date=${date}`,
     method: 'get'
   })
 }
