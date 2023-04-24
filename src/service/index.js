@@ -22,6 +22,13 @@ export const login = (username, password) => {
   })
 }
 
+export const verifyToken = () => {
+  return service.request({
+    url: '/test',
+    method: 'get'
+  })
+}
+
 export const getUserInfo = (userId) => {
   return service.request({
     url: `/users/${userId}`,

@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import cache from "@/utils/cache"
+import { verifyToken } from "@/service"
 
 const routes = [
   {
@@ -67,17 +68,21 @@ const router = createRouter({
   history: createWebHistory()
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   if(to.path !== '/login') {
     const token = cache.getCache('token')
-    if(!token) {
+    let res = null
+    if(token) {
+      res = await verifyToken()
+    }
+    if(!token || res.code !== 100) {
       router.push('/login')
     }
   }
   if(to.path === '/detail') {
     const detail = cache.getCache('momentDetail')
     if(!detail) {
-      router.push('//home')
+      router.push('/home')
     }
   }
 })
