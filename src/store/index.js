@@ -10,13 +10,15 @@ const pinia =  createPinia()
 export default pinia
 
 const setupStore = async () => {
-  const res = await verifyToken()
-  if(res.code === 100) {
-    const user = useUserStore()
-    user.loadLocalData()
-    const moment = useMomentStore()
-    moment.loadLocalData()
-  } else {
+  try {
+    const res = await verifyToken()
+    if(res.code === 100) {
+      const user = useUserStore()
+      user.loadLocalData()
+      const moment = useMomentStore()
+      moment.loadLocalData()
+    }
+  } catch {
     router.push('/login')
   }
 }
