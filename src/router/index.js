@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router"
 import cache from "@/utils/cache"
-import { verifyToken } from "@/service"
 
 const routes = [
   {
@@ -71,11 +70,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   if(to.path !== '/login') {
     const token = cache.getCache('token')
-    let res = null
-    if(token) {
-      res = await verifyToken()
-    }
-    if(!token || res.code !== 100) {
+    if(!token) {
       router.push('/login')
     }
   }

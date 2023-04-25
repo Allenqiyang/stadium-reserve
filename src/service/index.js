@@ -36,6 +36,16 @@ export const getUserInfo = (userId) => {
   })
 }
 
+export const updateUserName = (newName) => {
+  return service.request({
+    url: '/users/update',
+    method: 'post',
+    data: {
+      newName
+    }
+  })
+}
+
 export const reserve = (courtId, date, period) => {
   return service.request({
     url: '/reserve',
