@@ -48,6 +48,7 @@
         <el-button type="success" class="confirm-upload" @click="confirmUpload">确认上传</el-button>
       </div>
     </div>
+    <UserReserve />
   </div>
 </template>
 
@@ -60,6 +61,7 @@ import { ElMessage } from 'element-plus'
 import "element-plus/theme-chalk/el-message.css"
 import { Edit } from '@element-plus/icons-vue'
 
+import UserReserve from './childs/UserReserve.vue'
 import { useUserStore } from '@/store'
 import { uploadAvatar, getUserInfo, updateUserName } from '@/service'
 
