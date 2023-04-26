@@ -38,17 +38,22 @@
         </el-table-column>
         <el-table-column label="Operations">
           <template #default="scope">
-            <el-button 
-              size="small" 
-              @click="doReserve(scope.$index)"
-              :disabled="Boolean(courtStatus[scope.$index])"
-            >预约</el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="doCancel(scope.$index)"
-              :disabled="Boolean(!courtStatus[scope.$index])"
-            >取消</el-button>
+            <div v-if="operable[scope.$index]">
+              <el-button 
+                size="small" 
+                @click="doReserve(scope.$index)"
+                :disabled="Boolean(courtStatus[scope.$index])"
+              >预约</el-button>
+              <el-button
+                size="small"
+                type="danger"
+                @click="doCancel(scope.$index)"
+                :disabled="Boolean(!courtStatus[scope.$index])"
+              >取消</el-button>
+            </div>
+            <div v-else style="color:#C0C4CC; padding-left: 22px;">
+              已被预约
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -63,6 +68,7 @@ import { ElMessage } from "element-plus"
 import "element-plus/theme-chalk/el-message.css"
 
 import { getStadiumStatus, reserve, cancel } from "../../service"
+import { useUserStore } from "@/store"
 import ReserveConfirm from "./childs/ReserveConfirm.vue"
 
 // 1 羽毛   2 篮球   3 足球   4 乒乓
@@ -120,11 +126,23 @@ const tableData = [
   '17:00 - 18:00'
 ]
 
+const user = useUserStore()
+
+const operable = ref(new Array(7).fill(1))
 const courtStatus = ref([])
 
 const currentCourtId = computed(() => stadiumToCourt[chosenStadium.value - 1][chosenCourt.value - 1])
+
 const setCourtStatus = async () => {
-  courtStatus.value = await getStadiumStatus(currentCourtId.value, chosenDate.value)
+  const res = await getStadiumStatus(currentCourtId.value, chosenDate.value)
+  operable.value.fill(1)
+  courtStatus.value.fill(0)
+  res.forEach(item => {
+    courtStatus.value[item.period - 1] = 1
+    if(item.user_id !== user.userInfo.id) {
+      operable.value[item.period - 1] = 0
+    }
+  })
 }
 onMounted(() => {
   setCourtStatus()
